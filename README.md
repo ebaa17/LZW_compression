@@ -1,1 +1,2 @@
-# LZW_compression
+# LZW compression
+A dictionary-based compression algorithm
