@@ -1,1 +1,1 @@
-"# LZW_compression" 
+# LZW_compression
