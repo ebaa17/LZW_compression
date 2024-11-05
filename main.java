@@ -1,4 +1,9 @@
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class LZW {
@@ -39,7 +44,7 @@ public class LZW {
         StringBuilder decompressed= new StringBuilder();
         Map<Integer , String> dictionary=new HashMap<>();
         for (int i = 0; i < 128; i++) {
-          dictionary.put(i, Character.toString(i));
+            dictionary.put(i, Character.toString(i));
         }
 
         int nextDictionaryCode=128;
@@ -80,20 +85,48 @@ public class LZW {
 
     }
 
+    public static void main(String[] args) throws IOException {
+        File file = new File("Input.txt");
+        String input = Files.readString(file.toPath()).trim();
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter a string to compress: ");
-        String input = scanner.nextLine();
-        scanner.close();
+        if (file.exists()){
+            // Compress the input
+            List<Integer> compressed = LZWCompression(input);
+            String decompressed = LZWDecompression(compressed);
+//            System.out.println("Compressed output: " + compressed);
+//            System.out.println("Decompressed output: " + decompressed);
 
-        List<Integer> compressed = LZWCompression(input);
-        System.out.println("Compressed output: " + compressed);
+            Path outputFile = Paths.get("Output.txt");
+            if (!Files.exists(outputFile)) {
+                Files.createFile(outputFile);
+            }
+            StringBuilder outputContent = new StringBuilder();
+            outputContent.append("Compressed: ").append(compressed.toString().replaceAll("[\\[\\],]", "")).append("\n");
+            outputContent.append("Decompressed: ").append(decompressed);
 
-        String decompressed = LZWDecompression(compressed);
-        System.out.println("Decompressed output: "+ decompressed);
+            Files.writeString(outputFile, outputContent.toString());
 
-        System.out.println("Checkkk: " +input.equals(decompressed));
+            // verify en huwa huwa
+            System.out.println("Check: " + input.equals(decompressed));
+        }else{
+            System.out.println("Error, File doesn't exist!");
+        }
     }
+
+
+//    public static void main(String[] args) {
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.print("Enter a string to compress: ");
+//        String input = scanner.nextLine();
+//        scanner.close();
+//
+//        List<Integer> compressed = LZWCompression(input);
+//        System.out.println("Compressed output: " + compressed);
+//
+//        String decompressed = LZWDecompression(compressed);
+//        System.out.println("Decompressed output: "+ decompressed);
+//
+//        System.out.println("Checkkk: " +input.equals(decompressed));
+//    }
 
 }
